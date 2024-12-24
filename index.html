@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Table Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #0078D7;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .toolbar {
+            background: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+        }
+        .table-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            justify-content: center;
+        }
+        .table {
+            width: 120px;
+            height: 100px;
+            margin: 10px;
+            background-color: #7da0d4;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            line-height: 1.5;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .table.occupied {
+            background-color: #f57c00;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    Web POS Table Management
+</div>
+
+<div class="toolbar">
+    <button onclick="toggleView('all')">All</button>
+    <button onclick="toggleView('vacant')">Vacant</button>
+    <button onclick="toggleView('occupied')">Occupied</button>
+</div>
+
+<div class="table-container" id="tableContainer">
+    <!-- Tables will be generated dynamically -->
+</div>
+
+<div class="footer">
+    Vacant: <span id="vacantCount">0</span> | Occupied: <span id="occupiedCount">0</span>
+</div>
+
+<script>
+    // Sample Table Data
+    const tables = [
+        { id: 1, name: "Table 1", occupied: false },
+        { id: 2, name: "Table 2", occupied: true },
+        { id: 3, name: "Table 3", occupied: false },
+        { id: 4, name: "Table 4", occupied: true },
+        { id: 5, name: "Table 5", occupied: false },
+        { id: 6, name: "Table 6", occupied: false },
+        { id: 7, name: "Table 7", occupied: true },
+        { id: 8, name: "Table 8", occupied: false }
+    ];
+
+    // Render Tables
+    function renderTables(filter = 'all') {
+        const container = document.getElementById('tableContainer');
+        container.innerHTML = '';
+
+        let vacantCount = 0;
+        let occupiedCount = 0;
+
+        tables.forEach(table => {
+            if (filter === 'all' || (filter === 'vacant' && !table.occupied) || (filter === 'occupied' && table.occupied)) {
+                const tableDiv = document.createElement('div');
+                tableDiv.classList.add('table');
+                tableDiv.innerHTML = `${table.name} <br> ${table.occupied ? 'Occupied' : 'Vacant'}`;
+                if (table.occupied) {
+                    tableDiv.classList.add('occupied');
+                    occupiedCount++;
+                } else {
+                    vacantCount++;
+                }
+                container.appendChild(tableDiv);
+            }
+        });
+
+        document.getElementById('vacantCount').textContent = vacantCount;
+        document.getElementById('occupiedCount').textContent = occupiedCount;
+    }
+
+    // Filter Tables by Status
+    function toggleView(status) {
+        renderTables(status);
+    }
+
+    // Initial Render
+    renderTables();
+</script>
+
+</body>
+</html>
